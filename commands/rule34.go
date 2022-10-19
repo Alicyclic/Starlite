@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/starlite/modules"
-	. "github.com/starlite/utils"
+	"github.com/starlite/utils"
 	"github.com/valyala/fasthttp"
 )
 
@@ -46,7 +46,7 @@ func NewHTTPRequest(url string) Rule34Posts {
 func FilterPostsImagesOnly(r Rule34Posts) Rule34Posts {
 	for _, post := range r {
 		go func(post *Rule34Post) {
-			if !IsImage(post.ImageURL) {
+			if !utils.IsImage(post.ImageURL) {
 				post.ImageURL = post.Preview
 			}
 		}(post)
@@ -67,14 +67,14 @@ func GetPosts(tags string) Rule34Posts {
 	return GenerateNewPosts(tags)
 }
 
-func (r *Rule34Post) CreateEmbed(tags string) *Embed {
-	return NewEmbed().
+func (r *Rule34Post) CreateEmbed(tags string) *utils.Embed {
+	return utils.NewEmbed().
 		SetImage(r.ImageURL).
 		SetURL(r.ImageURL).
 		SetTitle(strings.Title(tags))
 }
 
-func RandomResponse(tags string) *Embed {
+func RandomResponse(tags string) *utils.Embed {
 	post := GetPosts(tags)
 	rand.Seed(time.Now().Unix())
 	random := rand.Intn(len(post))

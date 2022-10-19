@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
-	. "github.com/starlite/utils"
+	"github.com/starlite/utils"
 )
 
 type Response struct {
@@ -33,7 +33,7 @@ func (r *Response) CheckPermission(userID string, channelID string, permission i
 	return (err == nil) && (p&permission == permission)
 }
 
-func (r *Response) AddEmbeds(e ...*Embed) *Response {
+func (r *Response) AddEmbeds(e ...*utils.Embed) *Response {
 	if !r.CheckPermission(r.State.User.ID, r.ChannelID, discordgo.PermissionEmbedLinks) {
 		r.Content = "Unable to send embed messages!"
 		return r
