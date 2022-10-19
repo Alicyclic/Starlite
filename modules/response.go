@@ -8,19 +8,14 @@ import (
 )
 
 type Response struct {
-	Ephemeral bool
 	*discordgo.Interaction
 	*discordgo.Session
 	*discordgo.InteractionResponseData
+	Ephemeral bool
 }
 
 func NewResponse(i *discordgo.Interaction, s *discordgo.Session) *Response {
-	return &Response{
-		Session:                 s,
-		Interaction:             i,
-		Ephemeral:               false,
-		InteractionResponseData: &discordgo.InteractionResponseData{},
-	}
+	return &Response{i, s, &discordgo.InteractionResponseData{}, false}
 }
 
 func (r *Response) AddMessageComponent(com ...discordgo.MessageComponent) {
@@ -61,8 +56,10 @@ func (r *Response) SendResponse() {
 	if r.Ephemeral {
 		r.Flags = discordgo.MessageFlagsEphemeral
 	}
-	r.InteractionRespond(r.Interaction, &discordgo.InteractionResponse{
+	if err := r.InteractionRespond(r.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: r.InteractionResponseData,
-	})
+	}); err != nil {
+		panic(err)
+	}
 }

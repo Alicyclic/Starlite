@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/bwmarrin/discordgo"
@@ -84,8 +83,6 @@ func (b *CommandManager) Init() {
 		case discordgo.InteractionMessageComponent:
 			if act, ok := utils.GetAction(i.MessageComponentData().CustomID); ok {
 				act(s, i.Interaction)
-			} else {
-				fmt.Println("Action doesn't exist?")
 			}
 		}
 
